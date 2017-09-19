@@ -1,8 +1,8 @@
 # Ecache
-Ecache是一个基于leveldb、protobuf、nif构建的轻量级、高效、没有容量限制的本地磁盘缓存系统。
+Ecache是一个基于erlang nif、leveldb、protobuf构建的轻量级、高效、没有容量限制的本地磁盘缓存系统。
 
 ## 设计目的
-在进行服务器开发的时候，我们使用Erlang来进行整体架构，本地磁盘缓存系统使用dets(disk erlang term storage)完成。dets在使用上非常方便，提供完善的数据的lookup，insert，delete，select等常用的操作，但是dets提供的存储容量上限不超过2G的限制，不能满足我们的业务需求，如果需要更大容量的数据存储支持，需要引入mnesia，这样的引入无疑加大了系统的开发和维护的成本，其复杂度也远远超出了我对本地磁盘缓存系统的预期。
+在进行服务器开发的时候，我们使用Erlang来进行整体架构，本地磁盘缓存系统使用dets(disk erlang term storage)完成。dets在使用上非常方便，提供完善的数据操作接口，比如lookup，insert，delete，select等常用的操作，但是dets提供的存储容量上限不超过2G的限制，不能满足我们的业务需求，如果需要更大容量的数据存储支持，需要引入mnesia，这样的引入无疑加大了系统的开发和维护的成本，其复杂度也远远超出了我对本地磁盘缓存系统的预期。
 
 先看下我需要的磁盘缓存系统应该是怎样的：
 
@@ -20,9 +20,13 @@ dets无法满足第1条，mnesia无法满足第4条。所以开发Ecache系统�
 
 ## 核心
 
-> Ecache.cc：封装了leveldb常用接口，同时在open之后知道close或者关闭进程之前，长期持有缓存系统的入口。后期会加入一些统计，便于内部信息的查看。
-> Wrapper.cc：该类很简单，只对用户输入数据进行一次编码，统一为CommonData格式。
-> ecc.cc：nif实现文件，存储的时候接受binary类型，查询返回也是binary类型，这样做的目的就是，让用户自己决定用什么实现来打包数据，可以根据具体的数据采用具体的打包方式，当然也可以简单的统一使用term_to_binary进行打包，查询后使用binary_to_term解包。
+> 1. Ecache.cc：封装了leveldb常用接口，同时在open之后直到close或者关闭进程之前，长期持有缓存系统的入口。提供统计，便于内部信息的查看。
+> 2. Wrapper.cc：该类很简单，只对用户输入数据进行一次编码，统一为CommonData格式。
+> 3. ecc.cc：nif实现文件，存储的时候接受binary类型，查询返回也是binary类型，这样做的目的就是，让用户自己决定用什么实现来打包数据，可以根据具体的数据采用具体的打包方式，当然也可以简单的统一使用term_to_binary进行打包，查询后使用binary_to_term解包。
+
+## Ecache提供的功能
+
+支持常规的插入(put),查找(get),按条件查找(select),删除(erase),查看系统信息(info)。
 
 ## 安装
 
@@ -105,6 +109,9 @@ ok = ecc:close().
 ```
 
 > 可以使用put/3这个接口，额外多了一个select时候的过滤条件参数，默认为0
+
+### 测评
+...
 
 ### 交流
 QQ: 1628025718(注明Ecache)
