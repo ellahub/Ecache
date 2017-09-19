@@ -94,17 +94,32 @@ make
 
 编译成功后会看到ecc.so动态库，将ecc.so和erl_src/ecc.erl加入项目中（根据so的位置，ecc.erl中的load_nif的地址需要调整一下）。
 
+### 测试用例
+
+测试用例在Ecache中的erl_src目录
+
+```bash
+cd erl_src
+erl
+>c(ecc).
+>c(test).
+>test:ready().
+>test:test().
+>test:test(100000).
+```
+运行正常的话可以看到erl_src目录下面多了leveldb的文件夹==test==
+
 ### 使用
 
+可以参考test.erl中测试用例。
+
 ```erlang
-ecc:init().
-ok = ecc:open("db").
+ecc:init(),
+ok = ecc:open("db"),
 Key = "key",
-Data = {1,2,3,4,5}.
-Cond = 0.
-Proto = "term_to_binary",
-ok = ecc:put(Key, term_to_binary(Data)).
-Data = binary_to_term(ecc:get("test")).
+Data = {1,2,3,4,5},
+ok = ecc:put(Key, term_to_binary(Data)),
+Data = binary_to_term(ecc:get("test")),
 ok = ecc:close().
 ```
 

@@ -4,10 +4,8 @@
 
 %% 调用load_nif和ready之后，使用test，testn进行基本的测试
 
-load_nif() ->
-   ecc:init().
-
 ready() ->
+   ecc:init(),
    ok = ecc:open("test").
 
 test() ->
