@@ -107,7 +107,7 @@ erl
 >test:test().
 >test:testn(100000).
 ```
-运行正常的话可以看到erl_src目录下面多了leveldb的文件夹==test==
+运行正常的话可以看到erl_src目录下面多了leveldb的文件夹test
 
 ### 使用
 
