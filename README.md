@@ -105,7 +105,7 @@ erl
 >c(test).
 >test:ready().
 >test:test().
->test:test(100000).
+>test:testn(100000).
 ```
 运行正常的话可以看到erl_src目录下面多了leveldb的文件夹==test==
 
