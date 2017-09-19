@@ -80,6 +80,7 @@ EOF
 
 ```bash
 git clone https://github.com/ellahub/Ecache.git
+cd Ecache
 # 生成CommonData.cc
 cd proto
 bash gen_proto.sh
