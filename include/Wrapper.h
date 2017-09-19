@@ -14,7 +14,7 @@
 class Wrapper {
 
 public:
-	static void wrap(const std::string& tag, const std::string& data, const uint cond, std::string* value);
+	static void wrap(const std::string& data, const uint cond, std::string* value);
 };
 
 #endif /* WRAPPER_H_ */
