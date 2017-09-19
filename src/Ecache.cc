@@ -96,14 +96,14 @@ void Ecache::show() {
 }
 
 //select op
-void Ecache::select(const std::string& proto_tag, const uint cond, std::vector<std::string>& result) {
+void Ecache::select(const uint cond, std::vector<std::string>& result) {
 
    CommonData value;
    leveldb::Iterator* it = db_->NewIterator(read_options_);
    for(it->SeekToFirst(); it->Valid(); it->Next()) {
       value.ParseFromString(it->value().ToString());
-      if (value.has_tag()) {
-         if (value.tag() == proto_tag && value.cond() > cond) {
+      if (value.has_cond()) {
+         if (value.cond() >= cond) {
            result.push_back(value.data());
          }
       }

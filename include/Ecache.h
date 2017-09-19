@@ -31,7 +31,7 @@ public:
    EccStatus put(const std::string& key, const std::string& value);
    EccStatus get(const std::string& key, std::string& value);
    EccStatus erase(const std::string& key);
-   void select(const std::string& proto_tag, const uint cond, std::vector<std::string>& result);
+   void select(const uint cond, std::vector<std::string>& result);
 
    //最后一次操作的状态
    leveldb::Status last() {
