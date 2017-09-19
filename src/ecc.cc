@@ -149,7 +149,7 @@ static ErlNifFunc nif_funcs[] =
 {
    {"open", 1, open}
    ,{"close", 0, close}
-   ,{"put", 4, put}
+   ,{"put", 3, put}
    ,{"get", 1, get}
    ,{"erase", 1, erase}
 };
