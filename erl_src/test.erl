@@ -10,14 +10,11 @@ load_nif() ->
 ready() ->
    ok = ecc:open("test").
 
-put(Key, Data) ->
-   ok = ecc:put(Key, "Foo", Data, 0).
-
 test() ->
    Data = {1,2,3,4,5,6,6},
    BD = term_to_binary(Data),
    Key = "eeee",
-   ok = test:put(Key,BD),
+   ok = ecc:put(Key,BD),
    BD = ecc:get(Key),
    ok = ecc:erase(Key),
    not_find = ecc:get(Key),

@@ -1,7 +1,6 @@
 -module(ecc).
 -author('atao').
--export([init/0, get/1, put/4, erase/1, open/1, close/0]).
-
+-export([init/0, get/1, put/2, put/3, erase/1, open/1, close/0]).
 
 %% @doc load ecc.so
 init() ->
@@ -20,9 +19,10 @@ close() ->
 
 %% @spec put(Key::string(), Proto::string(), Bin::binary(), Cond::integer()) -> ok
 %% @doc 插入
-%% @type Proto数据打包方式，通常为一个tag标记
-%% @doc select查询条件使用
-put(_Key, _Proto, _Bin, _Cond) ->
+%% @doc Cond:select查询条件使用
+put(_Key, _Bin) ->
+   put(_Key, _Bin, 0).
+put(_Key, _Bin, _Cond) ->
    "NIF library not loaded".
 
 %% @spec get(Key::string()) -> Value::binary() | not_find

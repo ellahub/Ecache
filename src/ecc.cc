@@ -33,15 +33,6 @@ static ERL_NIF_TERM put(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 
    std::string key(key_buf, size);
 
-   //get proto
-   const uint proto_max_size = 40;
-   char proto_buf[proto_max_size];
-   if ((size = enif_get_string(env, argv[1], proto_buf, proto_max_size, ERL_NIF_LATIN1)) <= 0) {
-      return enif_make_badarg(env);
-   }
-
-   std::string proto(proto_buf, size);
-
    //get data
    ErlNifBinary bin;
    if (!enif_inspect_binary(env, argv[2], &bin))
@@ -64,7 +55,7 @@ static ERL_NIF_TERM put(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 
    //storage the data
    std::string storage_data;
-   Wrapper::wrap(proto, data_str, cond, &storage_data);
+   Wrapper::wrap(data_str, cond, &storage_data);
 
    if(ECACHE->put(key, storage_data) == ECC_OK)
       return make_atom(env, "ok");

@@ -20,9 +20,9 @@ dets无法满足第1条，mnesia无法满足第4条。所以开发Ecache系统�
 
 ## 核心
 
-Ecache类：封装了leveldb常用接口，同时在open之后知道close或者关闭进程之前，长期持有缓存系统的入口。后期会加入一些统计，便于内部信息的查看。
-Wrapper类：该类很简单，只对用户输入数据进行一次编码，统一为CommonData格式。
-ecc：nif实现文件，存储的时候接受binary类型，查询返回也是binary类型，这样做的目的就是，让用户自己决定用什么实现来打包数据，可以根据具体的数据采用具体的打包方式，当然也可以简单的统一使用term_to_binary进行打包，查询后使用binary_to_term解包。
+> Ecache.cc：封装了leveldb常用接口，同时在open之后知道close或者关闭进程之前，长期持有缓存系统的入口。后期会加入一些统计，便于内部信息的查看。
+> Wrapper.cc：该类很简单，只对用户输入数据进行一次编码，统一为CommonData格式。
+> ecc.cc：nif实现文件，存储的时候接受binary类型，查询返回也是binary类型，这样做的目的就是，让用户自己决定用什么实现来打包数据，可以根据具体的数据采用具体的打包方式，当然也可以简单的统一使用term_to_binary进行打包，查询后使用binary_to_term解包。
 
 ## 安装
 
@@ -94,12 +94,12 @@ Key = "key",
 Data = {1,2,3,4,5}.
 Cond = 0.
 Proto = "term_to_binary",
-ok = ecc:put(Key, Proto, term_to_binary(Data), Cond).
+ok = ecc:put(Key, term_to_binary(Data)).
 Data = binary_to_term(ecc:get("test")).
 ok = ecc:close().
 ```
 
-> put接口多出来了Proto,Cond两个参数：Proto用于标示Data序列化的方式，推荐使用protobuf，按需打包，减少不必要的数据。Cond用于select操作，目前只支持使用select查询所有大于Cond值的数据，比如最后修改时间小于7天前的数据，后期可能会扩展。
+> 可以使用put/3这个接口，额外多了一个select时候的过滤条件参数，默认为0
 
 ### 交流
 QQ: 1628025718(注明Ecache)
