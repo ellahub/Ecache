@@ -1,5 +1,5 @@
 -module(test).
-
+-author('atao').
 -compile(export_all).
 
 %% 调用load_nif和ready之后，使用test，testn进行基本的测试

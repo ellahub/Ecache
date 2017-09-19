@@ -1,3 +1,6 @@
+/*
+ * author:atao 1628025718@qq.com
+ * */
 #include <cassert>
 #include <iostream>
 #include <sstream>
@@ -29,7 +32,6 @@ static ERL_NIF_TERM put(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
    }
 
    std::string key(key_buf, size);
-   /*std::cout << "key:" << key << std::endl; */
 
    //get proto
    const uint proto_max_size = 40;
@@ -39,7 +41,6 @@ static ERL_NIF_TERM put(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
    }
 
    std::string proto(proto_buf, size);
-   /* std::cout << "proto:" << proto << std::endl; */
 
    //get data
    ErlNifBinary bin;
@@ -47,15 +48,12 @@ static ERL_NIF_TERM put(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
       return enif_make_badarg(env);
 
    //根据bin构造一个string类型
-   //char* buff = (char*)malloc(bin.size);
    char* buff = (char*)enif_alloc(bin.size);
 
    if(!buff)
       return enif_make_badarg(env);
    memcpy(buff, bin.data, bin.size);
    std::string data_str(buff, bin.size);
-   /* std::cout << data_str << std::endl; */
-   //free(buff);
    enif_free(buff);
 
    //get cond
@@ -63,8 +61,6 @@ static ERL_NIF_TERM put(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
    if (!enif_get_uint64(env, argv[3], &cond)) {
       return enif_make_badarg(env);
    }
-
-   /* std::cout << "cond:" << cond << std::endl; */
 
    //storage the data
    std::string storage_data;
@@ -86,9 +82,7 @@ static ERL_NIF_TERM get(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
    if ((size = enif_get_string(env, argv[0], key_buf, key_max_size, ERL_NIF_LATIN1)) <= 0) {
       return enif_make_badarg(env);
    }
-
    std::string key(key_buf, size);
-   /* std::cout << "key:" << key << std::endl; */
 
    //lookup value
    std::string value;
@@ -100,7 +94,6 @@ static ERL_NIF_TERM get(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
    std::string data_str = storage_data.data();
 
    //using data_str make a binary for return
-
    ErlNifBinary bin;
    int byteSize = data_str.size();
 
@@ -118,7 +111,6 @@ static ERL_NIF_TERM get(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 
 /*
  * @doc 开启一个leveldb
- * @true 成功返回"opened"
  * @TODO db的路径不超过1024
  * */
 static ERL_NIF_TERM open(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) 

@@ -1,3 +1,6 @@
+/*
+ * author:atao 1628025718@qq.com
+ * */
 #include "Ecache.h"
 
 //Init static member vars
