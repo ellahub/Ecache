@@ -1,0 +1,9 @@
+syntax='proto2';
+
+message citydata {
+   required uint64 id = 1;
+   required bytes account = 2;
+   required bytes name = 3;
+   required uint32 lv = 4;
+   required uint32 create_time = 5;
+}

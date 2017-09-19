@@ -1,0 +1,7 @@
+syntax='proto2';
+message CommonData {
+	required bytes tag = 1;  //data's encode proto tag
+	required bytes data = 2; //proto encoded msg
+	required uint32 cond = 3; //select cond
+
+}
