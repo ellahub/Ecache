@@ -94,6 +94,39 @@ make
 
 编译成功后会看到ecc.so动态库，将ecc.so和erl_src/ecc.erl加入项目中（根据so的位置，ecc.erl中的load_nif的地址需要调整一下）。
 
+### ecc.so正确性检测
+因为有的系统已经安装了leveldb或者protobuf，在load_nif的时候失败，可以通过ldd -r ecc.so指令查看是否有相关符号的丢失，默认情况下输出下面是正确的：
+
+```bash
+[root@localhost Ecache]# ldd -r ecc.so 
+        linux-vdso.so.1 =>  (0x00007ffeb11ca000)
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f39b920e000)
+        libprotobuf.so.14 => /usr/local/lib/libprotobuf.so.14 (0x00007f39b8d9a000)
+        libleveldb.so.1 => /usr/local/lib/libleveldb.so.1 (0x00007f39b8b45000)
+        libstdc++.so.6 => /lib64/libstdc++.so.6 (0x00007f39b883c000)
+        libm.so.6 => /lib64/libm.so.6 (0x00007f39b853a000)
+        libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007f39b8323000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f39b7f62000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f39b9652000)
+        libz.so.1 => /lib64/libz.so.1 (0x00007f39b7d4c000)
+        libsnappy.so.1 => /lib64/libsnappy.so.1 (0x00007f39b7b45000)
+undefined symbol: enif_make_atom        (./ecc.so)
+undefined symbol: enif_make_list_from_array     (./ecc.so)
+undefined symbol: enif_free     (./ecc.so)
+undefined symbol: enif_alloc    (./ecc.so)
+undefined symbol: enif_make_string_len  (./ecc.so)
+undefined symbol: enif_get_ulong        (./ecc.so)
+undefined symbol: enif_make_binary      (./ecc.so)
+undefined symbol: enif_get_string       (./ecc.so)
+undefined symbol: enif_make_existing_atom       (./ecc.so)
+undefined symbol: enif_alloc_binary     (./ecc.so)
+undefined symbol: enif_make_list        (./ecc.so)
+undefined symbol: enif_inspect_binary   (./ecc.so)
+undefined symbol: enif_make_badarg      (./ecc.so)
+```
+
+遇到libprotobuf相关的符号丢失的话，将最新安装的protobu中相关的so文件拷贝到ecc.so执行的protobuf链接库的位置，做一次替换和生成相应的软连接，执行ldconfig。
+
 ### 测试用例
 
 测试用例在Ecache中的erl_src目录
